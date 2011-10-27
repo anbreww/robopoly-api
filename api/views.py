@@ -1,10 +1,9 @@
-from flask import Flask
+from api import app
+
 import sys
 import json
 import subprocess
 import tsol
-app = Flask(__name__)
-app.debug = True
 
 @app.route("/")
 def hello():
