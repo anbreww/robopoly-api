@@ -1,4 +1,6 @@
 from api import app
+from flask import send_from_directory
+import os
 
 import sys
 import json
@@ -8,6 +10,11 @@ import tsol
 @app.route("/")
 def hello():
     return ".".join( [str(x) for x in sys.version_info[0:3]] )
+
+@app.route("/favicon.ico")
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+            'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.route("/people/<int:sciper>")
 def get_name(sciper):
