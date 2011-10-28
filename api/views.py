@@ -1,5 +1,7 @@
 from api import app
 from flask import send_from_directory
+from flask import url_for
+from flask import request
 import os
 
 import sys
@@ -7,9 +9,16 @@ import json
 import subprocess
 import tsol
 
+# TODO: replace this with a static template
 @app.route("/")
 def hello():
-    return ".".join( [str(x) for x in sys.version_info[0:3]] )
+    output = "Robopoly API, running on flask with Python v"
+    output += ".".join( [str(x) for x in sys.version_info[0:3]] )
+    with app.test_request_context():
+        output += "<br /> Try it now : <br /><a href=\""
+        output += url_for('get_name', sciper='190000')
+        output += "\">People</a>"
+    return output
 
 @app.route("/favicon.ico")
 def favicon():
@@ -19,9 +28,57 @@ def favicon():
 @app.route("/people/<int:sciper>")
 def get_name(sciper):
     # can't get ldap to compile with python 2.7, please don't hate me for this.
-    output = subprocess.Popen(["python", "/var/www/api/search.py",str(sciper)],stdout=subprocess.PIPE)
-    name = output.stdout.readlines()[0].rstrip()
+    try:
+        output = subprocess.Popen(["python", "/var/www/api/search.py",str(sciper)],stdout=subprocess.PIPE)
+        name = output.stdout.readlines()[0].rstrip()
+    except:
+        name = "Error : No user"
     return  name
+
+# TODO : implement this
+@app.route("/camipro/<camipro>")
+def get_sciper(camipro):
+    '''
+    Maps CAMIPRO numbers to SCIPER numbers.
+
+    Used to find a user's unique identifier from his card number
+    '''
+    return "[not implemented] Return SCIPER #"
+
+@app.route("/music/")
+@app.route("/music/<action>", methods=['GET','POST'])
+def now_playing(action="playing"):
+    '''
+    Provides an interface to MPD
+
+    By default, returns currently playing song. POST requests allow some
+    control of the music, such as "next, previous, pause, play, stop".
+    '''
+    if request.method == 'GET':
+        result = music_now_playing()
+    else:
+        result = music_action(action)
+    return result
+
+def music_now_playing():
+    return "Rick Astley - Never Gonna Give You Up"
+
+def music_action(action="playing"):
+    if action == "playing":
+        return music_now_playing()
+    elif action == "next":
+        return "Skipping track."
+    elif action == "pause":
+        return "Play/Pause"
+    elif action == "stop":
+        return "Stopped music"
+    elif action == "play":
+        return "Starting playback"
+    elif action == "previous":
+        return "Starting playback of previous track"
+    else:
+        return "Wrong method call"
+        
 
 #Ohhhh ouiiii
 @app.route("/tsol/")
