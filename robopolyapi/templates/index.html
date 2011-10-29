@@ -1,3 +1,4 @@
+<!DOCTYPE HTML>
 <html>
   <head>
     <link rel="stylesheet" type="text/css"
@@ -15,9 +16,9 @@
 
     <p>Please try some examples:<br />
     <ul>
-        <li><a href="{{ people_link }}">The People API</a></li>
-        <li><a href="{{ tsol_link }}">The TSOL API</a></li>
-        <li><a href="{{ music_link }}">The Music API</a></li>
+      {% for href, text in examples %}
+      <li><a href="{{ href }}">{{ text }}</a></li>
+      {% endfor %}
     </ul>
     </p>
     <hr />

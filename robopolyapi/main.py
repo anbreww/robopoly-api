@@ -18,9 +18,11 @@ def hello():
         people_link = url_for('get_name', sciper='190000')
         tsol_link = url_for('get_times', arret='EPFL', sens='R')
         music_link = url_for('now_playing')
+    examples=[(people_link, 'The People API'),
+                (tsol_link, 'The TSOL API'),
+                (music_link, 'The Music API')]
     return render_template('index.html', framework='Flask',
-            language=language, people_link=people_link, tsol_link=tsol_link,
-            music_link=music_link)
+            language=language, examples=examples)
 
 @app.route("/favicon.ico")
 def favicon():
