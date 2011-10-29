@@ -21,6 +21,7 @@ def hello():
     examples=[(people_link, 'The People API'),
                 (tsol_link, 'The TSOL API'),
                 (music_link, 'The Music API')]
+    language=app.config['SERVER_NAME']
     return render_template('index.html', framework='Flask',
             language=language, examples=examples)
 
