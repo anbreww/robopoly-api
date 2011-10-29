@@ -2,6 +2,7 @@ from robopolyapi import app
 from flask import send_from_directory
 from flask import url_for
 from flask import request
+from flask import render_template
 import os
 
 import sys
@@ -12,13 +13,12 @@ import tsol
 # TODO: replace this with a static template
 @app.route("/")
 def hello():
-    output = "Robopoly API, running on flask with Python v"
-    output += ".".join( [str(x) for x in sys.version_info[0:3]] )
+    language = "Python v" + ".".join( [str(x) for x in sys.version_info[0:3]] )
     with app.test_request_context():
-        output += "<br /> Try it now : <br /><a href=\""
-        output += url_for('get_name', sciper='190000')
-        output += "\">People</a>"
-    return output
+        people_link = url_for('get_name', sciper='190000')
+        tsol_link = url_for('get_times', arret='EPFL', sens='R')
+    return render_template('index.html', framework='Flask',
+            language=language, people_link=people_link, tsol_link=tsol_link)
 
 @app.route("/favicon.ico")
 def favicon():
