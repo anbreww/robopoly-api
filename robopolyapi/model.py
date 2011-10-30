@@ -77,7 +77,7 @@ class PersonGroup(Entity):
     machinegroups = ManyToMany('MachineGroup')
 
     def __repr__(self):
-        return '<PersonGroup %r>' % self.name
+        return '<PersonGroup %s>' % self.name
 
 class MachineGroup(Entity):
     name = Field(String(120))
@@ -87,3 +87,15 @@ class MachineGroup(Entity):
 
     # Each group of machines can be used by several groups of people
     usergroups = ManyToMany('PersonGroup')
+
+def can_use_machine(user, machine):
+    '''
+    Tells you if a given user can use a machine.
+
+    Return : Bool
+    '''
+    for g in range(len(user.groups)):
+        for m in range(len(machine.machinegroups)):
+            if user.groups[g] in machine.machinegroups[m].usergroups:
+                return True
+    return False
