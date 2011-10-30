@@ -2,8 +2,8 @@ from robopolyapi import app
 from flask import send_from_directory
 from flask import url_for
 from flask import render_template
-import os
 
+import os
 import sys
 
 # TODO: replace this with a static template
