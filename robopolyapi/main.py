@@ -2,8 +2,8 @@ from robopolyapi import app
 from flask import send_from_directory
 from flask import url_for
 from flask import render_template
-import os
 
+import os
 import sys
 
 # TODO: replace this with a static template
@@ -29,6 +29,9 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
             'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('error.html'), 404
 
 if __name__ == "__main__":
     app.debug = True

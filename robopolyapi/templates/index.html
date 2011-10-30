@@ -1,27 +1,14 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <link rel="stylesheet" type="text/css"
-    href="http://fonts.googleapis.com/css?family=Cabin:700" /> 
-    <title>Robopoly API</title>
-    <style>
-      body {
-        font-family: 'Cabin', sans-serif;
-        font-size: 18px;
-      }
-    </style>
-  </head>
-  <body>
+{% extends "layout.html" %}
+{% block body %}
     <h1>Welcome to the Robopoly API</h1>
 
     <p>Please try some examples:<br />
     <ul>
-      {% for href, text in examples %}
+      {%- for href, text in examples %}
       <li><a href="{{ href }}">{{ text }}</a></li>
-      {% endfor %}
+      {%- endfor %}
     </ul>
     </p>
     <hr />
     <p>We are running on {{ framework }} on {{ language }}</p>
-  </body>
-</html>
+{% endblock %}
