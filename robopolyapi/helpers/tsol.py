@@ -7,10 +7,11 @@ from urllib import urlencode
 import urllib, re
 
 def tsol(arret, dir):
-    if not dir in ['A', 'R']:
-        dir = 'A'
+    dir = dir.lower();
+    if not dir in ['a', 'r']:
+        dir = 'a'
 
-    directions = {'A':'L', 'R':'R'}
+    directions = {'a':'L', 'r':'R'}
 
     base_url = 'http://www.t-l.ch/htr.php?'
     payload = dict(ligne='70', sens=dir, arret=arret+'_'+directions[dir])
@@ -21,6 +22,8 @@ def tsol(arret, dir):
     table_re = re.compile('<table\s[^>]*id=\"htr_param_table\"[^>]*>(.*)<\/table>', re.I|re.M|re.S)
     time_re = re.compile('<td\s[^>]*><span\s[^>]*>([^<]*)<\/span>[^<]*<\/td>', re.I|re.M|re.S)
     table = table_re.findall(content)
+    if len(table) == 0:
+        return []
     elements = time_re.findall(table[0])
 
     return elements
