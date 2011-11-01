@@ -13,14 +13,18 @@ class SciperSearch:
         self.dn = "o=epfl,c=ch"
         self.scope = ldap.SCOPE_SUBTREE
 
-    def get_attributes(self, sciper, attribs=None):
+    def get_attributes(self, sciper, attribs=False):
         '''
         Returns attributes for a given user
 
         Input: a dictionary of ldap attributes
         '''
-        if attribs is None:
+        # Using False, because None returns all fields : this is good.
+        if attribs is False:
             attribs = ['givenName', 'sn', 'mail', 'displayName']
+        if attribs == "all":
+            attribs = ['givenName', 'sn', 'mail', 'displayName', 'ou',
+                    'PersonalTitle',  'description']
         searchFilter = "uniqueIdentifier=%s" % sciper
 
         ldap_result_id = self.l.search(self.dn, self.scope, searchFilter, attribs)
@@ -37,6 +41,23 @@ class SciperSearch:
         except IndexError:
             res = "ERROR: not found"
         return res
+
+    def morf(self, sciper):
+        '''
+        Gives a fairly good approximation if a user is male or female
+        '''
+        descr = self.get_attributes(sciper, ['description'])['description'][0]
+        
+        # words that mean the user is female
+        words = ['Assistante', 'Adjointe', 'Apprentie', 'Chercheuse', 'Cheffe',
+                'Collaboratrice', 'Consultante', 'Coordinatrice', 'Directrice',
+                'Etudiante', 'Informaticienne', 'Laborantine']
+
+        # see if any of these strings are found in our description:
+        if True in [words[i] in descr for i in range(len(words))]:
+            return 'Female'
+        else:
+            return 'Male'
 
     def get_tuple(self, sciper):
         '''
