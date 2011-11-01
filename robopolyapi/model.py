@@ -15,12 +15,22 @@ class Person(Entity):
     firstname = Field(Unicode(120))
     lastname = Field(Unicode(120))
     displayname = Field(Unicode(120))
+    morf = Field(String(1)) # m, f or u (unknown)
+    year = Field(String(30)) # TODO : find a good descriptor
 
     transactions = OneToMany('Transaction')
     groups = ManyToMany('PersonGroup')
+    section = ManyToOne('Section')
 
     def __repr__(self):
         return "<User %s (%s)>" % (self.camipro, self.email)
+
+# TODO : find section from LDAP info, create if not exists.
+class Section(Entity):
+    name = Field(String(30))    # e.g. "MT"
+    long_name = Field(Unicode(100)) # e.g. "Microtechnique"
+
+    persons = OneToMany('Person')
 
 class Transaction(Entity):
     amount = Field(Integer)

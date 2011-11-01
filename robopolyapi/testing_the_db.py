@@ -84,15 +84,22 @@ def add_from_ldap(sciper, group):
     Quick helper script to add someone to a given group and the database
     '''
     details = ss.get_tuple(sciper)
+    morf = ss.morf(sciper)
     if details is not None:
         # unpack
         sciper, firstname, lastname, displayname, email = details
-        print [displayname]
         firstname = unicode_me(firstname)
         lastname = unicode_me(lastname)
         displayname = unicode_me(displayname)
         user = Person(camipro=sciper, email=email, name=firstname,
                 firstname=firstname, lastname=lastname, displayname=displayname)
+        if morf == "Male":
+            morf = 'm'
+        elif morf == 'Female':
+            morf = 'f'
+        else:
+            morf = 'u'
+
         print group.name + " -> " + displayname + " ( " + sciper + " ) "
         group.members.append(user)
     else:
