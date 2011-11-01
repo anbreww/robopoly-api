@@ -32,7 +32,10 @@ class SciperSearch:
             else:
                 if result_type == ldap.RES_SEARCH_ENTRY:
                     result_set.append(result_data)
-        res = result_set[0][0][1]
+        try:
+            res = result_set[0][0][1]
+        except IndexError:
+            res = "ERROR: not found"
         return res
 
     def get_tuple(self, sciper):
@@ -42,7 +45,12 @@ class SciperSearch:
         Format : ('Sciper', 'FirstName', 'LastName', 'DisplayName', 'Email')
         '''
         attrs = ('uniqueIdentifier', 'givenName', 'sn', 'displayName', 'mail')
-        return tuple(self.get_attributes(sciper, attrs)[key][0] for key in attrs)
+        try:
+            result = tuple(self.get_attributes(sciper, attrs)[key][0]
+                    for key in attrs)
+        except TypeError:
+            result = None
+        return result
 
 
     def get_name(self,sciper):

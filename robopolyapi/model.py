@@ -40,7 +40,7 @@ class Transaction(Entity):
         return '<Transaction %r>' % self.amount
 
 class Machine(Entity):
-    name = Field(String(120))
+    name = Field(Unicode(120))
     apikey = Field(String(60))
 
     # Machines can have a "type" attribute
@@ -60,7 +60,7 @@ class Machine(Entity):
         return '<Machine %r (key: %s)>' % (self.name, self.apikey)
 
 class MachineType(Entity):
-    name = Field(String(120))
+    name = Field(Unicode(120))
 
     machines = OneToMany('Machine')
 
@@ -68,7 +68,7 @@ class MachineType(Entity):
         return '<MachineType %r>' % self.name
 
 class PersonGroup(Entity):
-    name = Field(String(120))
+    name = Field(Unicode(120))
 
     # Each person can be part of several groups
     members = ManyToMany('Person')
@@ -77,10 +77,10 @@ class PersonGroup(Entity):
     machinegroups = ManyToMany('MachineGroup')
 
     def __repr__(self):
-        return '<PersonGroup %s>' % self.name
+        return '<PersonGroup %r>' % self.name
 
 class MachineGroup(Entity):
-    name = Field(String(120))
+    name = Field(Unicode(120))
 
     # Each machine can be part of several groups
     machines = ManyToMany('Machine')
